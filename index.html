@@ -1,76 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<style type="text/css">
-		body {
-			width: 100%;
-		}
-		canvas {
-			background-color: rgb(199, 181, 181);
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <style type="text/css">
+        body {
+            width: 100%;
+        }
+
+        canvas {
+            background-color: rgb(199, 181, 181);
+        }
+    </style>
 </head>
+
 <body>
-	<canvas id="mycanvas" width="500" height="500">
-		Tu navegador no soporta canvas
-	</canvas>
+    <canvas id="mycanvas" width="500" height="500">
+        Tu navegador no soporta canvas
+    </canvas>
+    <img src="./img/sm.jpg" id="image" width="200" height="200">
+    <script type="text/javascript">
 
-	<script type="text/javascript">
+        var cv = document.getElementById('mycanvas');
+        var ctx = cv.getContext('2d');
 
-		var cv= document.getElementById('mycanvas');
-		var ctx = cv.getContext('2d');
+        // ctx.strokeStyle = "white";
+        // ctx.strokeRect(50,50, 150,150);
 
-		// ctx.strokeStyle = "white";
-		// ctx.strokeRect(50,50, 150,150);
+        // ctx.strokeStyle = "red";
+        // ctx.strokeRect(150,150, 150,150);
 
-		// ctx.strokeStyle = "red";
-		// ctx.strokeRect(150,150, 150,150);
+        //cuadrado
+        ctx.fillStyle = "rgb(200,0,0)";
+        ctx.fillRect(10, 10, 55, 55);
 
-		//cuadrado
-		ctx.fillStyle = "rgb(200,0,0)";
-		ctx.fillRect(10,10,55,55);
+        ctx.fillStyle = "rgba(0,0,200,0.5)";
+        ctx.fillRect(60, 60, 55, 55);
 
-		ctx.fillStyle = "rgba(0,0,200,0.5)";
-		ctx.fillRect(60,60,55,55);
+        ctx.fillStyle = "rgb(200,200,200)";
+        ctx.fillRect(110, 110, 55, 55);
 
-		ctx.fillStyle = "rgb(200,200,200)";
-		ctx.fillRect(110,110,55,55);
+        //líneas
+        ctx.moveTo(0, 0);
+        ctx.lineTo(250, 250);
+        ctx.stroke();
 
-		//líneas
-		ctx.moveTo(0,0);
-		ctx.lineTo(250,250);
-		ctx.stroke();
+        ctx.moveTo(150, 200);
+        ctx.lineTo(310, 350);
+        ctx.lineTo(180, 330);
+        ctx.lineTo(150, 200);
+        ctx.fill();
+        ctx.stroke();
 
-		ctx.moveTo(150,200);
-		ctx.lineTo(310,350);
-		ctx.lineTo(180,330);
-		ctx.lineTo(150,200);
-		ctx.fill();
-		ctx.stroke();
+        //arc
+        ctx.beginPath();
+        ctx.arc(250, 250, 100, 0, 2 * Math.PI);
+        ctx.stroke();
 
-		//arc
-		ctx.beginPath();
-		ctx.arc(250,250,100,0,2*Math.PI);
-		ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(300, 100, 50, 0, 2 * Math.PI);
+        ctx.fill();
 
-		ctx.beginPath();
-		ctx.arc(300,100,50,0,2*Math.PI);
-		ctx.fill();
+        ctx.beginPath();
+        ctx.arc(410, 100, 50, 0, 2 * Math.PI);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
 
-		ctx.beginPath();
-		ctx.arc(410,100,50,0,2*Math.PI);
-		ctx.strokeStyle = "red";
-		ctx.stroke();
+        //text
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "blue";
+        ctx.fillText("Manuel Miranda", 150, 30);
+        ctx.strokeText("Manuel F", 150, 80);
 
-		//text
-		ctx.font = "30px Arial";
-		ctx.fillStyle = "blue";
-		ctx.fillText("Manuel Miranda", 150,30);
-		ctx.strokeText("Manuel F", 150,80);
+        // linear gradiant
+        var grd = ctx.createLinearGradient(0, 0, 370, 0);
+        grd.addColorStop(0, "orange");
+        grd.addColorStop(0.5, "purple");
+        grd.addColorStop(1, "pink");
 
-	</script>
+        ctx.fillStyle = grd;
+        ctx.fillRect(20, 380, 200, 100);
+
+        // radial gradiant
+        var gradient = ctx.createRadialGradient(75, 50, 5, 90, 60, 100);
+        gradient.addColorStop(0, 'red');
+        gradient.addColorStop(1, 'white');
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(10, 10, 150, 100);
+
+        // drawImage
+        window.onload = function () {
+            var img = document.getElementById("image");
+            ctx.drawImage(img, 380, 380, 100, 100);
+        };
+
+        // onclick arc
+        ctx.fillStyle = "rgba(0,0,200,0.5)";
+        ctx.strokeStyle = "black";
+        var color = random_rgba();
+        var fig = 'arc';
+
+        cv.addEventListener('click', function (e) {
+            ctx.fillStyle = color;
+
+            if (fig == 'rec') {
+
+                ctx.fillRect(e.offsetX - 20, e.offsetY - 20, 50, 50);
+                ctx.strokeRect(e.offsetX - 20, e.offsetY - 20, 50, 50);
+            } else {
+
+                ctx.beginPath();
+                ctx.arc(e.offsetX - 20, e.offsetY - 20, 40, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }
+        });
+
+        // random color
+        function random_rgba() {
+            var o = Math.round, r = Math.random, s = 255;
+            return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
+        }
+
+        // mouseover change color
+        cv.addEventListener('mouseover', function (e) {
+            color = random_rgba();
+        });
+
+        // mouseout change shape
+        cv.addEventListener('mouseout', function (e) {
+            fig = (fig == 'arc') ? 'rec' : 'arc';
+        })
+
+
+
+    </script>
 </body>
+
 </html>
