@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landscape</title>
+    <style type="text/css">
+        body {
+            width: 100%;
+        }
+
+        canvas {
+            background-color: rgb(22, 42, 80);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="mycanvas" width="1000" height="800">
+        Tu navegador no soporta canvas
+    </canvas>
+
+    <script type="text/javascript">
+
+        var cv = document.getElementById('mycanvas');
+        var ctx = cv.getContext('2d');
+
+        // ctx.strokeStyle = "white";
+        // ctx.strokeRect(50,50, 150,150);
+
+        // ctx.strokeStyle = "red";
+        // ctx.strokeRect(150,150, 150,150);
+
+        // Baby Moon
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(69, 74, 83);";
+        ctx.strokeStyle = "white"
+        ctx.arc(250, 110, 50, 0, Math.PI * 2, true);
+        ctx.moveTo(285, 110);
+        ctx.arc(250, 110, 35, 0, Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+        ctx.moveTo(235, 95);
+        ctx.arc(230, 95, 5, 0, Math.PI * 2, true);  // Ojo izquierdo
+        ctx.moveTo(275, 95);
+        ctx.arc(270, 95, 5, 0, Math.PI * 2, true);  // Ojo derecho
+        ctx.stroke();
+        
+        // clouds
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.arc(480, 110, 40, 0, Math.PI * 2, true);
+        ctx.arc(520, 110, 60, 0, Math.PI * 2, true);
+        ctx.arc(560, 110, 60, 0, Math.PI * 2, true);
+        ctx.arc(610, 110, 60, 0, Math.PI * 2, true);
+        ctx.arc(650, 110, 40, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill();
+
+        // stars
+        ctx.fillStyle = "gray";
+        ctx.fillRect(100, 110, 5, 5);
+        ctx.fillRect(400, 110, 5, 5);
+        ctx.fillRect(800, 110, 5, 5);
+        ctx.fillRect(400, 110, 5, 5);
+        ctx.fillRect(300, 150, 5, 5);
+        ctx.fillRect(350, 200, 5, 5);
+        ctx.fillRect(600, 290, 5, 5);
+        ctx.fillRect(800, 390, 5, 5);
+        ctx.fillRect(850, 200, 5, 5);
+        ctx.fillRect(700, 250, 5, 5);
+        ctx.fillRect(130, 250, 5, 5);
+        ctx.fillRect(260, 250, 5, 5);
+        ctx.fillRect(400, 250, 5, 5);
+        ctx.fillRect(500, 250, 5, 5);
+        ctx.fillRect(800, 150, 5, 5);
+        ctx.fillRect(900, 250, 5, 5);
+        ctx.fillRect(890, 300, 5, 5);
+
+
+        // field
+        ctx.fillStyle = "green";
+        ctx.fillRect(0, 700, 1000, 100);
+
+        // emo house
+        ctx.fillStyle = "black";
+        ctx.fillRect(100, 300, 500, 400);
+
+        // windows
+        ctx.fillStyle = "white";
+        ctx.fillRect(149, 361, 50, 50);
+        ctx.fillRect(200, 361, 50, 50);
+        ctx.fillRect(149, 412, 50, 50);
+        ctx.fillRect(200, 412, 50, 50);
+
+        ctx.fillRect(430, 361, 50, 50);
+        ctx.fillRect(481, 361, 50, 50);
+        ctx.fillRect(430, 412, 50, 50);
+        ctx.fillRect(481, 412, 50, 50);
+
+        // chimmey
+        ctx.fillStyle = "grey";
+        ctx.fillRect(169, 220, 30, 80);
+
+        // door
+        ctx.fillStyle = "brown";
+        ctx.fillRect(300, 550, 100, 150);
+
+    </script>
+</body>
+
+</html>
