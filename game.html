@@ -20,19 +20,44 @@
     <canvas id="mycanvas" width="500" height="500">
         Tu navegador no soporta canvas
     </canvas>
-    <img src="./img/sm.jpg" id="image" width="100" height="100">
+    <!-- <img src="./img/sm.jpg" id="image" width="100" height="100"> -->
     <script type="text/javascript">
 
 var cv = null;
 var ctx = null;
 var player1 = null;
+var player2 = null;
+var pared = null;
+
 var super_x = 240, super_y = 240;
+
+var direction = 'right';
+var score = 0;
+var speed = 10;
+
+var hedgehog = new Image();
+var emerald = new Image();
+var wall = new Image();
+
+var sonido1 = new Audio();
+
+var pause = false;
 
 function start() {
     cv = document.getElementById('mycanvas');
     ctx = cv.getContext('2d');
 
     player1 = new Cuadrado(super_x,super_y,40,40,'red');
+
+    player2 = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, 'yellow');
+
+    pared = new Cuadrado(40,80,30,300, 'gray');
+
+    hedgehog.src = './img/hedgehog.png';
+    emerald.src = './img/emerald.png';
+    wall.src = './img/wall.png';
+
+    sonido1.src = '/sonido/sonido.mp3'
 
     paint();
 }
@@ -43,13 +68,33 @@ function paint() {
     ctx.fillStyle = "pink";
     ctx.fillRect(0,0,500,500);
 
-    player1.c = random_rgba();
-    player1.dibujar(ctx);
+    ctx.fillStyle = "black";
+    ctx.fillText('SCORE:' +score+ 'SPEED: ' +speed+,30,20);
+
+    player1.c = "black";
+    // player1.dibujar(ctx);
     // ctx.fillStyle = random_rgba();
     // ctx.fillRect(super_x, super_y, 40, 40);
     // ctx.strokeRect(super_x, super_y, 40, 40);
 
-    update();
+    // player1.dibujar(ctx);
+    ctx.drawImage(hedgehog,player1.x,player1.y);
+
+    // player2.dibujar(ctx);
+    ctx.drawImage(emerald,player2.x,player2.y);
+
+    pared.dibujar(ctx);
+
+
+    if(pause) {
+    	ctx.fillStyle = "rgba(0,0,0,0.5)";
+    	ctx.fillRect(0,0,500,500);
+
+    	ctx.fillStyle = "white";
+    	ctx.fillText('P A U S E', 230, 230);
+    } else {
+    	update();
+    }
 }
 
 function update() {
@@ -94,6 +139,31 @@ function Cuadrado(x,y,w,h,c)  {
             var o = Math.round, r = Math.random, s = 255;
             return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
         }
+
+if (player1.se_tocan(player2)) {
+	player2.x = generateRandomInteger(500);
+	player2.y = generateRandomInteger(500);
+
+	score += 10;
+	speed += 5;
+
+	sonido1.play();
+}
+// el if pared va dentro de un if
+if (player1.se_tocan(pared)) {
+	if (direction == 'right') {
+		player1.x -= speed;
+	}
+	if (direction == 'left') {
+		player1.x += speed;
+	}
+	if (direction == 'down') {
+		player1.y -= speed;
+	}
+	if (direction == 'up') {
+		player1.y += speed;
+	}
+}
 
     </script>
 </body>
