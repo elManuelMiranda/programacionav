@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Datos</title>
+</head>
+<body>
+	
+	<div id="contenedor">
+		<h1>Bienvenido {{user}}</h1>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Username</th>
+					<th>Password</th>
+					<th>Email</th>
+					<th>Address</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>{{u.id}}</th>
+					<th>{{u.name}}</th>
+					<th>{{u.username}}</th>
+					<th>{{u.email}}</th>
+					<th>{{u.phone}}</th>
+					<th>{{u.website}}</th>
+				</tr>
+				<tr>
+					<th>{{u.id}}</th>
+					<th>{{u.name}}</th>
+					<th>{{u.username}}</th>
+					<th>{{u.email}}</th>
+					<th>{{u.phone}}</th>
+					<th>{{u.website}}</th>
+				</tr>
+				<tr>
+					<th>{{u.id}}</th>
+					<th>{{u.name}}</th>
+					<th>{{u.username}}</th>
+					<th>{{u.email}}</th>
+					<th>{{u.phone}}</th>
+					<th>{{u.website}}</th>
+				</tr>
+				<tr>
+					<th>{{u.id}}</th>
+					<th>{{u.name}}</th>
+					<th>{{u.username}}</th>
+					<th>{{u.email}}</th>
+					<th>{{u.phone}}</th>
+					<th>{{u.website}}</th>
+				</tr>
+				<tr>
+					<th>{{u.id}}</th>
+					<th>{{u.name}}</th>
+					<th>{{u.username}}</th>
+					<th>{{u.email}}</th>
+					<th>{{u.phone}}</th>
+					<th>{{u.website}}</th>
+				</tr>
+				<tr>
+					<th>{{u.id}}</th>
+					<th>{{u.name}}</th>
+					<th>{{u.username}}</th>
+					<th>{{u.email}}</th>
+					<th>{{u.phone}}</th>
+					<th>{{u.website}}</th>
+				</tr>
+			</tbody>
+			<tfooter>
+
+			</tfooter>
+		</table>
+	</div>
+
+	<script src="https://unpkg.com/vue@3"></script>
+	<script type="text/javascript">
+		
+		const { createApp } = Vue;
+
+		const app = createApp({
+			data(){
+				return{
+					users:null
+				}
+			},
+			methods:{
+			},
+			mounted(){
+
+				var usr = localStorage.getItem('user');
+				usr = JSON.parse(usr);
+				console.log(usr.name);
+				this.user = usr.name;
+
+				var usr = localStorage.getItem('user');
+				usr = JSON.parse(usr);
+				console.log(usr.name);
+				this.user = usr.name;
+
+				var usr = localStorage.getItem('user');
+				usr = JSON.parse(usr);
+				console.log(usr.name);
+				this.user = usr.name;
+
+
+				fetch('data/users.json')
+				.then((res) => res.json())
+				.then((json) => (this.users = json))
+				.catch((err) => (alert('no data')))
+			}
+		}).mount('#contenedor')
+
+	</script>
+</body>
+</html>

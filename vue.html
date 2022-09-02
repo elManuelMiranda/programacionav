@@ -7,14 +7,85 @@
 </head>
 <body>
 	
-	<div id="myapp">
-		<h1> Hello {{ name }} </h1>
+	<div id="contenedor">
+		<form action="">
+			<fieldset>
+				<legend>
+					Datos de acceso
+				</legend>
+
+				<label for="">
+					Correo electronico
+				</label>
+				<input type="email" v-model="email" required>
+
+				<br>
+
+				<label for="">
+					Password
+				</label>
+				<input type="password" v-model="password" required>
+
+				<button onclick="login()">
+					Ingresar
+				</button>
+			</fieldset>
+		</form>
 	</div>
 
 	<script src="https://unpkg.com/vue@3"></script>
 	<script type="text/javascript">
 		
 		const { createApp } = Vue;
+
+		const app = createApp({
+			data(){
+				return{
+					users:null,
+					email:'',
+					password:''
+
+				}
+			},
+			methods:{
+				login(e){
+					
+					var temp_mail = this.email
+					var temp_pwd = this.password
+
+					var access = this.users.map(function(u){
+
+						if (temp_mail === u.email) {
+							if (temp_pwd === u.password) {
+
+								var temp_usr = {
+									name: u.name
+									username: u.usermame
+									email: u.email
+								}
+								localStorage.setItem('user', JSON.stringify(temp_usr));
+								alert("Accesos correctos")
+								window.location.href = 'users.html'
+							}
+						}
+					})
+
+
+					alert('Datos incorrectos')
+
+					console.log(this.email);
+					console.log(this.password);
+
+					e.preventDefault()
+				}
+			},
+			mounted(){
+				fetch('data/users.json')
+				.then((res) => res.json())
+				.then((json) => (this.users = json))
+				.catch((err) => (alert('no data')))
+			}
+		}).mount('#contenedor')
 
 		createApp({
 			data() {
