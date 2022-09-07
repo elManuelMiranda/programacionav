@@ -6,94 +6,105 @@
 	<title>Vue</title>
 </head>
 <body>
-	
-	<div id="contenedor">
-		<form action="">
-			<fieldset>
-				<legend>
-					Datos de acceso
-				</legend>
 
-				<label for="">
-					Correo electronico
-				</label>
-				<input type="email" v-model="email" required>
+    <div id="container">
+        <h1>{{ name }}</h1>
+        <h3>{{ lastname }}</h3>
 
-				<br>
+        <fieldset>
+            <h1>Personal info</h1>
+            <input type="text" v-model="name" placeholder="Name" />
+            <input type="text" v-model="lastname" placeholder="Last name" />
+            <button @click="greet">Greet</button>
+        </fieldset>
+        <hr />
+        <fieldset>
+            <legend>Calculator</legend>
+            <input type="number" v-model="num1" />
+            <input type="number" v-model="num2" />
+            <button @click="sum">Sum</button>
+            <h3>{{ result }}</h3>
+        </fieldset>
+        <hr/>
+        <h2>Plebada</h2>
+        <ol>
+            <li v-for="student in students">{{student.name}} :  {{student.role}}</li>
+        </ol>
 
-				<label for="">
-					Password
-				</label>
-				<input type="password" v-model="password" required>
+        <hr/>
+        <fieldset>
+            <legend>New student</legend>
+            <input type="text" v-model="a_name" placeholder="Name" />
+            <input type="text" v-model="a_role" placeholder="Rol" />
+            <button @click="add">Add</button>
+        </fieldset>
+        <hr />
 
-				<button onclick="login()">
-					Ingresar
-				</button>
-			</fieldset>
-		</form>
-	</div>
+        <fieldset>
+            <label for="" style="padding-right: 20px">Age</label>
+            <input type="number" v-model="age" />
+            <h1 v-if="age >= 18">Pasele a pistear</h1>
+            <h1 v-show="age < 18">Fuga pa la casa</h1>
+        </fieldset>
+    </div>
 
 	<script src="https://unpkg.com/vue@3"></script>
 	<script type="text/javascript">
-		
+
 		const { createApp } = Vue;
 
 		const app = createApp({
-			data(){
-				return{
-					users:null,
-					email:'',
-					password:''
-
-				}
-			},
-			methods:{
-				login(e){
-					
-					var temp_mail = this.email
-					var temp_pwd = this.password
-
-					var access = this.users.map(function(u){
-
-						if (temp_mail === u.email) {
-							if (temp_pwd === u.password) {
-
-								var temp_usr = {
-									name: u.name
-									username: u.usermame
-									email: u.email
-								}
-								localStorage.setItem('user', JSON.stringify(temp_usr));
-								alert("Accesos correctos")
-								window.location.href = 'users.html'
-							}
-						}
-					})
-
-
-					alert('Datos incorrectos')
-
-					console.log(this.email);
-					console.log(this.password);
-
-					e.preventDefault()
-				}
-			},
-			mounted(){
-				fetch('data/users.json')
-				.then((res) => res.json())
-				.then((json) => (this.users = json))
-				.catch((err) => (alert('no data')))
-			}
-		}).mount('#contenedor')
-
-		createApp({
 			data() {
 				return {
-					name: 'Manuel Miranda'
-				}
-			}
-		}).mount('#myapp')
+                    num1: 0,
+                    num2: 0,
+                    result: 0,
+                    age: 0,
+                    students: [
+                        {
+                            name: 'Manny',
+                            role: 'Front End'
+                        },
+                        {
+                            name: 'Maryam',
+                            role: 'Full Stack'
+                        },
+                        {
+                            name: 'Tina',
+                            role: 'Data Analyst'
+                        },
+                        {
+                            name: 'Dede',
+                            role: 'Back End'
+                        },
+                        {
+                            name: 'Helin',
+                            role: 'Data Engineer'
+                        },
+                    ],
+                    a_name: '',
+                    roles: '',
+					name: '',
+                    lastname: ''
+				};
+			},
+            methods: {
+                greet() {
+                    alert('Hi, ' + this.name + ' ' + this.lastname);
+                    this.name = name;
+                    this.lastname = lastname;
+                },
+                sum() {
+                    this.result =+ this.num1 + this.num2;
+                },
+                add() {
+                    this.students.push({name:this.a_name, role:this.a_role});
+                    this.a_name = '';
+                    this.a_role = '';
+                }
+
+            }
+		}).mount('#container')
 
 	</script>
 </body>
