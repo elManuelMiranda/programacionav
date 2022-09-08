@@ -1,120 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Datos</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Data
+    </title>
+    <style type="text/css">
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
+
 <body>
-	
-	<div id="contenedor">
-		<h1>Bienvenido {{user}}</h1>
+    <div id="contenedor">
 
-		<table>
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Name</th>
-					<th>Username</th>
-					<th>Password</th>
-					<th>Email</th>
-					<th>Address</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th>{{u.id}}</th>
-					<th>{{u.name}}</th>
-					<th>{{u.username}}</th>
-					<th>{{u.email}}</th>
-					<th>{{u.phone}}</th>
-					<th>{{u.website}}</th>
-				</tr>
-				<tr>
-					<th>{{u.id}}</th>
-					<th>{{u.name}}</th>
-					<th>{{u.username}}</th>
-					<th>{{u.email}}</th>
-					<th>{{u.phone}}</th>
-					<th>{{u.website}}</th>
-				</tr>
-				<tr>
-					<th>{{u.id}}</th>
-					<th>{{u.name}}</th>
-					<th>{{u.username}}</th>
-					<th>{{u.email}}</th>
-					<th>{{u.phone}}</th>
-					<th>{{u.website}}</th>
-				</tr>
-				<tr>
-					<th>{{u.id}}</th>
-					<th>{{u.name}}</th>
-					<th>{{u.username}}</th>
-					<th>{{u.email}}</th>
-					<th>{{u.phone}}</th>
-					<th>{{u.website}}</th>
-				</tr>
-				<tr>
-					<th>{{u.id}}</th>
-					<th>{{u.name}}</th>
-					<th>{{u.username}}</th>
-					<th>{{u.email}}</th>
-					<th>{{u.phone}}</th>
-					<th>{{u.website}}</th>
-				</tr>
-				<tr>
-					<th>{{u.id}}</th>
-					<th>{{u.name}}</th>
-					<th>{{u.username}}</th>
-					<th>{{u.email}}</th>
-					<th>{{u.phone}}</th>
-					<th>{{u.website}}</th>
-				</tr>
-			</tbody>
-			<tfooter>
+        <h1>
+            Welcome {{ user }}
+        </h1>
 
-			</tfooter>
-		</table>
-	</div>
+        <button @click="onAction = (onAction)?false:true">
+            Add new user
+        </button>
 
-	<script src="https://unpkg.com/vue@3"></script>
-	<script type="text/javascript">
-		
-		const { createApp } = Vue;
+        <br>
 
-		const app = createApp({
-			data(){
-				return{
-					users:null
-				}
-			},
-			methods:{
-			},
-			mounted(){
+        <table v-if="onAction == false">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Website</th>
+                    <th>Company</th>
+                    <th>Actions </th>
+                </tr>
+            </thead>
 
-				var usr = localStorage.getItem('user');
-				usr = JSON.parse(usr);
-				console.log(usr.name);
-				this.user = usr.name;
+            <tbody>
 
-				var usr = localStorage.getItem('user');
-				usr = JSON.parse(usr);
-				console.log(usr.name);
-				this.user = usr.name;
+                <tr v-for="u in users">
+                    <th>{{ u.id }}</th>
+                    <th>{{ u.name }}</th>
+                    <th>{{ u.username }}</th>
+                    <th>{{ u.email }}</th>
+                    <th>{{ u.address.street }}, {{ u.address.suite }}, {{ u.address.city }}, {{ u.address.zipcode }}</th>
+                    <th>{{ u.phone }}</th>
+                    <th>{{ u.website }}</th>
+                    <th>{{ u.company.name }}</th>
+                    <th>
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </th>
+                </tr>
 
-				var usr = localStorage.getItem('user');
-				usr = JSON.parse(usr);
-				console.log(usr.name);
-				this.user = usr.name;
+            </tbody>
 
+            <div v-else>
+                <form>
+                    <fieldset>
+                        <legend>User data</legend>
 
-				fetch('data/users.json')
-				.then((res) => res.json())
-				.then((json) => (this.users = json))
-				.catch((err) => (alert('no data')))
-			}
-		}).mount('#contenedor')
+                        <label>Name</label>
+                        <input type="text" placeholder="Your name here">
 
-	</script>
+                        <label>Username</label>
+                        <input type="text" placeholder="Your username here">
+
+                        <button @click="add">Save</button>
+                        <button>Cancel</button>
+                    </fieldset>
+                </form>
+            </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script type="text/javascript">
+        const { createApp } = Vue
+
+        const app = createApp({
+            data() {
+                return {
+                    user: '',
+                    users: null,
+                    onAction: false
+                }
+            },
+            methods: {
+                add() {
+                    this.users.push({ name: this.name, user: this.username });
+                    this.name = '';
+                    this.username = '';
+                }
+
+            },
+            mounted() {
+
+                var usr = localStorage.getItem('user');
+                usr = JSON.parse(usr);
+                this.user = usr.name;
+
+                fetch('data/users.json')
+                    .then((res) => res.json())
+                    .then((json) => (this.users = json))
+                    .catch((err) => (alert('no data')))
+            }
+        }).mount('#contenedor')
+
+    </script>
 </body>
+
 </html>
