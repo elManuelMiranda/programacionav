@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/11ad6245f2.js" crossorigin="anonymous"></script>
+    <title>About</title>
+</head>
+
+<body>
+    <div id="contenedor" class="ctn">
+        <div class="card m-2" style="width: 50rem;">
+            <img :src="'https://image.tmdb.org/t/p/original/' + details.backdrop_path" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h3 class="card-title">{{details.title}}</h3>
+                <h5>Original Title: {{details.original_title}}</h5>
+                <p>{{details.release_date}} | {{details.runtime}} mins</p>
+                <p>{{details.vote_average}} <i class="fa-solid fa-star"></i> | {{details.status}}</p>
+                <p style="text-transform:uppercase;">{{details.tagline}}</p>
+                <p class="card-text">Sinopsis: {{details.overview}}</p>
+                <b>Genre:</b><br>
+                <span v-for="genre in details.genres">
+                    {{genre.name}}<br>
+                </span>
+                <b>Studios:</b><br>
+                <span v-for="studio in details.production_companies">
+                    {{studio.name}}<br>
+                </span>
+                <b>Production countries:</b><br>
+                <span v-for="production in details.production_countries">
+                    {{production.name}}<br>
+                </span>
+                <a class="btn btn-primary m-1" data-bs-toggle="collapse" href="#rate" role="button"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    Rate
+                </a>
+                <div class="collapse" id="rate">
+                    <div class="card card-body">
+                        <label for="customRange2" class="form-label">Rate this film</label>
+                        <star-rating v-bind:increment="0.5" v-model:rating="rating" @update:rating ="changeRating"></star-rating>
+                        <!-- <input v-model="sliderVal" type="range" class="form-range" min="0" max="5" step="0.5"
+                            id="customRange2" @change="changeRate"> -->
+                    </div>
+                </div>
+                <a class="btn btn-danger m-1" role="button" @click="removeRating">
+                    Remove rate
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- <script src="https://unpkg.com/vue3-star-ratings/dist/vue3-star-ratings.min.js"></script> -->
+    <script src="https://unpkg.com/vue-star-rating@next/dist/VueStarRating.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        const { createApp } = Vue;
+
+        const app = createApp({
+            data() {
+                return {
+                    details: '',
+                    filmId: '',
+                    sliderVal: ''
+                }
+            },
+            methods: {
+                filmDetails() {
+                    const c = this;
+
+                    var config = {
+                        method: 'get',
+                        url: 'https://api.themoviedb.org/3/movie/' + this.filmId,
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MDNjMmNjMTAzOTZhMjNhMWI0MDJhNTY1NzBmMjcyYSIsInN1YiI6IjYzMWY2N2YwY2MyNzdjMDA4YTYwZTk2MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3CT5M1tU9-6l5b-KsGpgnwtU2dRP9GN3mEl2LaWug10'
+                        }
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            c.details = response.data;
+                            console.log(c.details);
+                            console.log(JSON.stringify(response.data));
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                },
+                changeRating(rating) {
+                    this.rating= rating;
+                    // this.$emit('changeRate', this.sliderVal);
+                    // console.log(this.sliderVal);
+
+                    var data = JSON.stringify({
+                        "value": rating
+                    });
+
+                    var config = {
+                        method: 'post',
+                        url: 'https://api.themoviedb.org/3/movie/985939/rating',
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MDNjMmNjMTAzOTZhMjNhMWI0MDJhNTY1NzBmMjcyYSIsInN1YiI6IjYzMWY2N2YwY2MyNzdjMDA4YTYwZTk2MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3CT5M1tU9-6l5b-KsGpgnwtU2dRP9GN3mEl2LaWug10',
+                            'Content-Type': 'application/json'
+                        },
+                        data: data
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            console.log(JSON.stringify(response.data));
+                            console.log(data);
+                            alert("You've rated this film.");
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                removeRating() {
+
+                    var config = {
+                        method: 'delete',
+                        url: 'https://api.themoviedb.org/3/movie/' + this.filmId + '/rating',
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MDNjMmNjMTAzOTZhMjNhMWI0MDJhNTY1NzBmMjcyYSIsInN1YiI6IjYzMWY2N2YwY2MyNzdjMDA4YTYwZTk2MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3CT5M1tU9-6l5b-KsGpgnwtU2dRP9GN3mEl2LaWug10'
+                        },
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            console.log(JSON.stringify(response.data));
+                            alert("Rating removed succesfully.");
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            },
+            mounted() {
+                var filmId = localStorage.getItem('filmId');
+                filmId = JSON.parse(filmId);
+                this.filmId = filmId;
+
+                this.filmDetails();
+            }
+        }).component('star-rating', VueStarRating.default).mount('#contenedor');
+    </script>
+
+</body>
+
+</html>
