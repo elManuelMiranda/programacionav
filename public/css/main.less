@@ -1,0 +1,59 @@
+@bgColor: #1e7677;
+@btnColor: rgb(9, 107, 206);
+
+.setBgGeneral(@color) {
+    background-color: @color;
+}
+
+.setHoverBtn() {
+    background-color: white;
+    color: black;
+}
+
+.leadBtn() {
+    padding: 15px 32px;
+    background-color: @btnColor;
+    border: 1px solid blue;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    // background-color: red;
+    display: flex;
+    justify-content: center;
+
+    fieldset {
+        box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
+            rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+            rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+
+        form {
+            .setBgGeneral(yellow);
+
+            label,
+            input,
+            button {
+                display: block;
+                margin: 15px;
+            }
+
+            label {
+                background-color: @bgColor;
+            }
+
+            button {
+                .leadBtn();
+                &:hover {
+                    .setHoverBtn();
+                }
+            }
+        }
+    }
+}

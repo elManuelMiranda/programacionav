@@ -1,0 +1,35 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+.container {
+  display: flex;
+  justify-content: center;
+}
+.container fieldset {
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+.container fieldset form {
+  background-color: yellow;
+}
+.container fieldset form label,
+.container fieldset form input,
+.container fieldset form button {
+  display: block;
+  margin: 15px;
+}
+.container fieldset form label {
+  background-color: #1e7677;
+}
+.container fieldset form button {
+  padding: 15px 32px;
+  background-color: #096bce;
+  border: 1px solid blue;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.container fieldset form button:hover {
+  background-color: white;
+  color: black;
+}
