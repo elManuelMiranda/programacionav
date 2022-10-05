@@ -13,7 +13,7 @@ $products = $productController->getProducts();
 <head>
     <?php include '../layouts/head.template.php'; ?>
 </head>
-<!-- 239|EUfNYCG4lELxT12u51bovZBwCsrvfmFYPhxAr5fu -->
+<!-- mfloriano_19@alu.uabcs.mx  a0uGqZBW!mA1o0 -->
 
 <body>
 
@@ -33,14 +33,10 @@ $products = $productController->getProducts();
                 <section>
                     <div class="row bg-light m-2">
                         <div class="col">
-                            <label>
-                                /Productos
-                            </label>
+                            <label>/Products</label>
                         </div>
                         <div class="col">
-                            <button data-bs-toggle="modal" data-bs-target="#addProductModal" class=" float-end btn btn-primary">
-                                Añadir producto
-                            </button>
+                            <button data-bs-toggle="modal" data-bs-target="#addProductModal" class=" float-end btn btn-primary">Add product</button>
                         </div>
                     </div>
                 </section>
@@ -55,10 +51,10 @@ $products = $productController->getProducts();
                                 <div class="col-md-4 col-sm-12">
 
                                     <div class="card mb-2">
-                                        <img src="<?= $product->cover ?>" class="card-img-top" alt="...">
+                                        <img src="<?= $product->cover ?>" class="card-img-top" alt="<?= $product->name ?>">
                                         <div class="card-body">
                                             <h5 class="card-title"><?= $product->name ?></h5>
-                                            <h6 class="card-subtitle mb-2 text-muted"></h6>
+                                            <h6 class="card-subtitle mb-2 text-muted"><?= $product->brand->name ?></h6>
                                             <p class="card-text"><?= $product->description ?></p>
 
                                             <div class="row">
@@ -68,7 +64,7 @@ $products = $productController->getProducts();
                                                 <a onclick="eliminar(this)" class="btn btn-danger mb-1 col-6">
                                                     Eliminar
                                                 </a>
-                                                <a href="./details.php" class="btn btn-info col-12">
+                                                <a href="./details.php?slug=<?= $product->slug ?>" class="btn btn-info col-12">
                                                     Detalles
                                                 </a>
                                             </div>
@@ -96,30 +92,49 @@ $products = $productController->getProducts();
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add a product</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form>
+                <form method="post" action="../app/ProductsController.php" enctype="multipart/form-data">
 
                     <div class="modal-body">
 
-                        <?php for ($i = 0; $i < 6; $i++) : ?>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">@</span>
-                                <input required type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                            </div>
-                        <?php endfor; ?>
+                        <label>Name</label>
+                        <div class="input-group mb-3">
+                            <input name="name" type="text" class="form-control" placeholder="Product name" aria-label="Name" required>
+                        </div>
+
+                        <label>Slug</label>
+                        <div class="input-group mb-3">
+                            <input name="slug" type="text" class="form-control" placeholder="Product slug" aria-label="Slug" required>
+                        </div>
+
+                        <label>Description</label>
+                        <div class="input-group mb-3">
+                            <input name="description" type="text" class="form-control" placeholder="Product description" aria-label="Name" required>
+                        </div>
+
+                        <label>Features</label>
+                        <div class="input-group mb-3">
+                            <input name="features" type="text" class="form-control" placeholder="Product features" aria-label="Features" required>
+                        </div>
+
+                        <label>Cover</label>
+                        <div class="input-group mb-3">
+                            <input name="cover" type="file" class="form-control" placeholder="Product cover" aria-label="Cover" required>
+                        </div>
+
+                        <label>Brand ID</label>
+                        <div class="input-group mb-3">
+                            <input name="brand_id" type="text" class="form-control" placeholder="Product Brand ID" aria-label="Brand ID" required>
+                        </div>
 
                     </div>
-
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            Save changes
-                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add product</button>
+                        <input type="hidden" name="action" value="createProduct">
                     </div>
 
                 </form>

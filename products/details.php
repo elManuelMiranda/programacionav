@@ -1,3 +1,13 @@
+<?php
+
+include '../app/ProductsController.php';
+$productController = new ProductsController();
+$slug = $_GET['slug'];
+$productDetails = $productController->getDetails($slug);
+
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -23,13 +33,8 @@
                     <div class="row bg-light m-2">
                         <div class="col">
                             <label>
-                                /Productos/Detalles
+                                /Product/Details
                             </label>
-                        </div>
-                        <div class="col">
-                            <button data-bs-toggle="modal" data-bs-target="#addProductModal" class=" float-end btn btn-primary">
-                                Añadir producto
-                            </button>
                         </div>
                     </div>
                 </section>
@@ -41,11 +46,25 @@
                         <div class="col-md-4 col-sm-12">
 
                             <div class="card mb-2">
-                                <img src="http://pm1.narvii.com/8032/e59dd9b6f8c6c61f1b814fc8d244c7c128dc5c9fr1-2048-2048v2_uhq.jpg" class="card-img-top" alt="...">
+                                <img src="<?= $productDetails->cover ?>" class="card-img-top" alt="<?= $productDetails->name ?>">
                                 <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <h5 class="card-title"><?= $productDetails->name ?></h5>
+
+                                    <h6 class="card-subtitle mb-2 text-muted"><b>Brand:</b> <?= $productDetails->brand->name ?></h6>
+
+                                    <p class="card-text"><b>Description:</b> <?= $productDetails->description ?></p>
+
+                                    <p class="card-text"><b>Features:</b> <?= $productDetails->features ?></p>
+
+                                    <b class="card-text">Categories:</b></br>
+                                    <?php foreach ($productDetails->categories as $category) : ?>
+                                        <?= $category->name ?></br>
+                                    <?php endforeach; ?>
+
+                                    <b class="card-text">Tags:</br></b>
+                                    <?php foreach ($productDetails->tags as $tag) : ?>
+                                        <?= $tag->name ?></br>
+                                    <?php endforeach; ?>
 
                                     <div class="row">
                                         <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
@@ -73,43 +92,6 @@
 
         </div>
 
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form>
-
-                    <div class="modal-body">
-
-                        <?php for ($i = 0; $i < 6; $i++) : ?>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">@</span>
-                                <input required type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                            </div>
-                        <?php endfor; ?>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            Save changes
-                        </button>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
     </div>
     <!-- SCRIPTS -->
     <?php include '../layouts/scripts.template.php'; ?>
