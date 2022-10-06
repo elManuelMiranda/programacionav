@@ -1,9 +1,12 @@
 <?php
 
 include "../app/ProductsController.php";
+include '../app/BrandsController.php';
 
 $productController = new ProductsController();
 $products = $productController->getProducts();
+$brandController = new BrandsController();
+$brands = $brandController->getBrands();
 
 ?>
 
@@ -127,7 +130,11 @@ $products = $productController->getProducts();
 
                         <label>Brand ID</label>
                         <div class="input-group mb-3">
-                            <input name="brand_id" type="text" class="form-control" placeholder="Product Brand ID" aria-label="Brand ID" required>
+                            <select name="brand_id" class="form-control">
+                                <?php foreach ($brands as $brand) : ?>
+                                    <option value="<?= $brand->id ?>"><?= $brand->name ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                     </div>
