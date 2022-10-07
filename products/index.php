@@ -22,8 +22,7 @@ $brands = $brandController->getBrands();
 
     <!-- NAVBAR -->
     <?php include '../layouts/nav.template.php'; ?>
-
-
+    
     <div class="container-fluid">
 
         <div class="row">
@@ -142,6 +141,7 @@ $brands = $brandController->getBrands();
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Add product</button>
                         <input type="hidden" name="action" value="createProduct">
+                        <input type="hidden" name="super_token" value="<?= $_SESSION['super_token'] ?>">
                     </div>
 
                 </form>
@@ -151,6 +151,26 @@ $brands = $brandController->getBrands();
     </div>
     <!-- SCRIPTS -->
     <?php include '../layouts/scripts.template.php'; ?>
+    <script type="text/javascript">
+        function eliminar(target) {
+            swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this imaginary file!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        swal("Poof! Your imaginary file has been deleted!", {
+                            icon: "success",
+                        });
+                    } else {
+                        swal("Your imaginary file is safe!");
+                    }
+                });
+        }
+    </script>
 
 </body>
 
