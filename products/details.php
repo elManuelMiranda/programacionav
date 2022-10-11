@@ -67,10 +67,10 @@ $productDetails = $productController->getDetails($slug);
                                     <?php endforeach; ?>
 
                                     <div class="row">
-                                        <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+                                        <a data-product='<?= json_encode($productDetails) ?>' onclick="editProduct(this)" data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
                                             Editar
                                         </a>
-                                        <a onclick="eliminar(this)" class="btn btn-danger mb-1 col-6">
+                                        <a onclick="eliminar(<?= $productDetails->id ?>)" class="btn btn-danger mb-1 col-6">
                                             Eliminar
                                         </a>
                                         <!-- <a href="#" class="btn btn-info col-12">
@@ -96,7 +96,7 @@ $productDetails = $productController->getDetails($slug);
     <!-- SCRIPTS -->
     <?php include '../layouts/scripts.template.php'; ?>
     <script type="text/javascript">
-        function eliminar(target) {
+        function eliminar(id) {
             swal({
                     title: "Are you sure?",
                     text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -106,13 +106,47 @@ $productDetails = $productController->getDetails($slug);
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        swal("Poof! Your imaginary file has been deleted!", {
-                            icon: "success",
-                        });
+                        var bodyFormData = new FormData();
+
+                        bodyFormData.append('id', id);
+                        bodyFormData.append('action', 'delete');
+
+                        axios.post('../app/ProductsController.php', bodyFormData)
+                            .then(function(response) {
+                                if (response.data) {
+                                    swal("Poof! Your imaginary file has been deleted!", {
+                                        icon: "success",
+                                    });
+                                } else {
+                                    swal("Error", {
+                                        icon: "error",
+                                    });;
+                                }
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
                     } else {
                         swal("Your imaginary file is safe!");
                     }
                 });
+        }
+
+        function editProduct(target) {
+
+            let product = JSON.parse(target.dataset.product);
+
+            document.getElementById('name').value = product.name;
+            document.getElementById('slug').value = product.slug;
+            document.getElementById('description').value = product.description;
+            document.getElementById('features').value = product.features;
+            document.getElementById('brand_id').value = product.brand_id;
+
+            document.getElementById('id_product').value = product.id;
+
+
+            document.getElementById('action').value = 'update';
+
         }
     </script>
 </body>

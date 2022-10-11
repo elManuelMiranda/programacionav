@@ -1,5 +1,6 @@
 <?php
 
+include '../app/config.php';
 include "../app/ProductsController.php";
 include '../app/BrandsController.php';
 
@@ -22,7 +23,8 @@ $brands = $brandController->getBrands();
 
     <!-- NAVBAR -->
     <?php include '../layouts/nav.template.php'; ?>
-    
+
+
     <div class="container-fluid">
 
         <div class="row">
@@ -60,15 +62,16 @@ $brands = $brandController->getBrands();
                                             <p class="card-text"><?= $product->description ?></p>
 
                                             <div class="row">
-                                                <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+                                                <a data-product='<?= json_encode($product) ?>' onclick="editProduct(this)" data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
                                                     Editar
                                                 </a>
-                                                <a onclick="eliminar(this)" class="btn btn-danger mb-1 col-6">
+                                                <a onclick="eliminar(<?= $product->id ?>)" class="btn btn-danger mb-1 col-6">
                                                     Eliminar
                                                 </a>
                                                 <a href="./details.php?slug=<?= $product->slug ?>" class="btn btn-info col-12">
                                                     Detalles
                                                 </a>
+                                                <input type="hidden" id="basepath" value="<?= BASE_PATH ?>">
                                             </div>
 
                                         </div>
@@ -98,7 +101,7 @@ $brands = $brandController->getBrands();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form method="post" action="../app/ProductsController.php" enctype="multipart/form-data">
+                <form method="post" action="<?= BASE_PATH ?>product" enctype="multipart/form-data">
 
                     <div class="modal-body">
 
@@ -141,6 +144,7 @@ $brands = $brandController->getBrands();
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Add product</button>
                         <input type="hidden" name="action" value="createProduct">
+                        <input type="hidden" id="id_product" name="id">
                         <input type="hidden" name="super_token" value="<?= $_SESSION['super_token'] ?>">
                     </div>
 
@@ -152,7 +156,7 @@ $brands = $brandController->getBrands();
     <!-- SCRIPTS -->
     <?php include '../layouts/scripts.template.php'; ?>
     <script type="text/javascript">
-        function eliminar(target) {
+        function eliminar(id) {
             swal({
                     title: "Are you sure?",
                     text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -162,16 +166,50 @@ $brands = $brandController->getBrands();
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        swal("Poof! Your imaginary file has been deleted!", {
-                            icon: "success",
-                        });
+                        var bodyFormData = new FormData();
+                        var basepath = document.getElementById("basepath").value;
+                        bodyFormData.append('id', id);
+                        bodyFormData.append('action', 'delete');
+                        bodyFormData.append('super_token', "<?= $_SESSION['super_token'] ?>");
+
+                        axios.post(basepath + 'product', bodyFormData)
+                            .then(function(response) {
+                                if (response.data) {
+                                    swal("Poof! Your imaginary file has been deleted!", {
+                                        icon: "success",
+                                    });
+                                } else {
+                                    swal("Error", {
+                                        icon: "error",
+                                    });;
+                                }
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
                     } else {
                         swal("Your imaginary file is safe!");
                     }
                 });
         }
-    </script>
 
+        function editProduct(target) {
+
+            let product = JSON.parse(target.dataset.product);
+
+            document.getElementById('name').value = product.name;
+            document.getElementById('slug').value = product.slug;
+            document.getElementById('description').value = product.description;
+            document.getElementById('features').value = product.features;
+            document.getElementById('brand_id').value = product.brand_id;
+
+            document.getElementById('id_product').value = product.id;
+
+
+            document.getElementById('action').value = 'update';
+
+        }
+    </script>
 </body>
 
 </html>
